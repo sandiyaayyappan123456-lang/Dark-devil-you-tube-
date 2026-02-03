@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialMix - Anime Edition</title>
+    <style>
+        :root {
+            --anime-pink: #ff66aa;
+            --bg-black: #000;
+            --card-bg: #121212;
+            --story-grad: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-black); color: white; height: 100%; overflow: hidden; }
+
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;
+        }
+        .login-box { width: 100%; max-width: 320px; text-align: center; }
+        .login-logo { font-size: 40px; font-weight: bold; color: var(--anime-pink); font-style: italic; margin-bottom: 40px; }
+        .login-input { width: 100%; padding: 14px; margin: 8px 0; background: #121212; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; }
+        .login-btn { width: 100%; padding: 14px; background: #0095f6; color: white; border: none; border-radius: 5px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        .login-footer { margin-top: 30px; color: #888; font-size: 13px; }
+
+        /* --- MAIN APP UI --- */
+        #main-app { display: none; height: 100%; }
+
+        header { background: #000; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
+        .logo { color: var(--anime-pink); font-weight: bold; font-size: 24px; font-style: italic; }
+
+        /* --- STORIES --- */
+        .stories-bar { display: flex; gap: 15px; padding: 15px 10px; overflow-x: auto; border-bottom: 1px solid #111; }
+        .stories-bar::-webkit-scrollbar { display: none; }
+        .story-item { text-align: center; font-size: 11px; min-width: 70px; }
+        .story-ring { width: 64px; height: 64px; border-radius: 50%; padding: 2px; background: var(--story-grad); margin-bottom: 5px; }
+        .story-ring.user { background: #333; }
+        .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; background: #111; }
+
+        /* --- SCREENS --- */
+        .screen { display: none; height: calc(100vh - 130px); overflow-y: auto; }
+        .active-screen { display: block; }
+
+        /* --- NAVIGATION --- */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 15px 0; }
+        .nav-item { cursor: pointer; font-size: 24px; color: #555; }
+        .nav-item.active { color: white; }
+
+        /* --- PROFILE --- */
+        .profile-header { padding: 20px; text-align: center; }
+        .stats-row { display: flex; justify-content: space-around; margin: 20px 0; }
+
+        /* --- COMMON UI --- */
+        .post-card { background: #000; margin-bottom: 15px; }
+        .post-video { width: 100%; background: #111; }
+        .btn-pink { background: var(--anime-pink); border: none; color: white; padding: 10px; border-radius: 5px; font-weight: bold; width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="login-logo">SocialMix</div>
+            <input type="text" id="user-input" class="login-input" placeholder="Phone number, username, or email">
+            <input type="password" class="login-input" placeholder="Password">
+            <button class="login-btn" onclick="loginApp()">Log In</button>
+            <div style="margin: 20px 0; color: #555;">OR</div>
+            <div style="color: #385185; font-weight: bold;">Log in with Facebook</div>
+            <div class="login-footer">Don't have an account? <span style="color: #0095f6;">Sign up</span></div>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <header id="main-header">
+            <div class="logo">SocialMix</div>
+            <div>🔍 &nbsp; 💬</div>
+        </header>
+
+        <div id="home-screen" class="screen active-screen">
+            <div class="stories-bar">
+                <div class="story-item"><div class="story-ring user"><img src=""></div><span>Your Story</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pinimg.com/236x/8e/8d/8a/8e8d8a7c6454807469a92f7535790d0b.jpg"></div><span>Zoro</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pinimg.com/236x/01/b8/ed/01b8ed399b1ef09c62956c3984d7a8d5.jpg"></div><span>Goku</span></div>
+            </div>
+            <div id="feed-container" style="padding: 50px; text-align: center; color: #444;">No posts to show.</div>
+        </div>
+
+        <div id="reels-screen" class="screen">
+            <div id="reels-container">
+                <div class="post-card">
+                    <video class="post-video" src="https://www.w3schools.com/html/movie.mp4" loop autoplay muted style="height: 100vh; object-fit: cover;"></video>
+                    <div style="position: absolute; bottom: 100px; left: 15px;">
+                        <h3>@Anime_Official</h3>
+                        <p>Tamil Anime Edit 🎵</p>
+                        <button onclick="addFollower()" style="background:var(--anime-pink); border:none; padding:5px 15px; color:white; border-radius:4px;">Follow</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="upload-screen" class="screen" style="padding: 20px;">
+            <h2 style="text-align: center;">New Post</h2>
+            <input type="file" id="up-file" class="login-input">
+            <select id="up-target" class="login-input">
+                <option value="home">Feed</option>
+                <option value="reel">Reels</option>
+            </select>
+            <textarea id="up-cap" class="login-input" placeholder="Write caption..."></textarea>
+            <button class="btn-pink" onclick="handleUpload()">Upload</button>
+        </div>
+
+        <div id="profile-screen" class="screen">
+            <div class="profile-header">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #222; margin: 0 auto 10px; border: 2px solid var(--anime-pink);"></div>
+                <h3 id="display-name">@User</h3>
+                <div class="stats-row">
+                    <div><b id="st-post">0</b><br><small>Posts</small></div>
+                    <div><b id="st-follow">0</b><br><small>Followers</small></div>
+                    <div><b id="st-following">0</b><br><small>Following</small></div>
+                </div>
+                <button class="login-btn" style="background: #222; width: auto; padding: 8px 30px;">Edit Profile</button>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="nav-item active" onclick="nav('home-screen', this)">🏠</div>
+            <div class="nav-item" onclick="nav('reels-screen', this)">🎬</div>
+            <div class="nav-item" onclick="nav('upload-screen', this)">➕</div>
+            <div class="nav-item" onclick="nav('profile-screen', this)">👤</div>
+        </div>
+    </div>
+
+    <script>
+        let pCount = 0, fCount = 0, iCount = 0;
+
+        // Login Logic
+        function loginApp() {
+            const user = document.getElementById('user-input').value;
+            if (user.trim() === "") return alert("Please enter a username!");
+            
+            document.getElementById('display-name').innerText = "@" + user;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+        }
+
+        // Navigation
+        function nav(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-screen');
+            el.classList.add('active');
+            document.getElementById('main-header').style.display = (id === 'reels-screen') ? 'none' : 'flex';
+        }
+
+        // Upload Logic
+        function handleUpload() {
+            const file = document.getElementById('up-file').files[0];
+            const cap = document.getElementById('up-cap').value;
+            if(!file) return alert("Select video!");
+
+            const url = URL.createObjectURL(file);
+            pCount++;
+            document.getElementById('st-post').innerText = pCount;
+
+            const html = `<div class="post-card"><video class="post-video" src="${url}" controls autoplay loop muted></video><div style="padding: 10px;"><b>@You</b> ${cap}</div></div>`;
+            
+            if(document.getElementById('up-target').value === 'home') {
+                document.getElementById('feed-container').innerHTML = ""; // Clear empty msg
+                document.getElementById('feed-container').insertAdjacentHTML('afterbegin', html);
+                nav('home-screen', document.querySelectorAll('.nav-item')[0]);
+            } else {
+                document.getElementById('reels-container').insertAdjacentHTML('afterbegin', html);
+                nav('reels-screen', document.querySelectorAll('.nav-item')[1]);
+            }
+        }
+
+        // Follower Logic
+        function addFollower() {
+            fCount++;
+            document.getElementById('st-follow').innerText = fCount;
+            alert("Success! You got a new follower.");
+        }
+    </script>
+</body>
+</html>
